@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from .bug import Bug
 from .enums import *
@@ -21,6 +21,13 @@ class TestBug(unittest.TestCase):
             else:
                 self.assertTrue(False)
             self.assertEquals(dateMngrMock.today.call_count, 0, 'Dependency called')
+
+    def test_bug_lifecycle(self):
+        dateMngrMock = Mock()
+        bug = Bug(Priority.LOW, 0.5, Technology.LEGACY, Type.BACKEND, dateMngrMock)
+        self.assertTrue(dateMngrMock.today.assert_called_once, 'Creation date not set')
+
+
 
 if __name__ == '__main__':
     unittest.main()
