@@ -105,6 +105,9 @@ class Bug():
         self.__status = Status.DONE
         self.__dateFinished = self.__date_mngr.today()
 
+        if self.__eta is None:
+            raise AttributeError('A bug without ETA cannot be completed')
+
         self.__overdue = self.__dateFinished > self.__eta # type: ignore
 
     def __str__(self):
