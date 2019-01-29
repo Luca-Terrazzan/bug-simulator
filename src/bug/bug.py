@@ -76,8 +76,6 @@ class Bug():
     def start(self, dev: Dev) -> None:
         if self.__status != Status.ETA:
             raise PermissionError('Cannot start a bug whose status is not ETA')
-        if type(dev) is not Dev:
-            raise TypeError('Dev is not a Dev')
 
         self.__status = Status.INPROGRESS
         self.__assignee = dev
