@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 
-class DateMngr():
+
+class DateMngr:
 
     def __init__(self, start_date: date = date.today()):
         self.__today: date = start_date

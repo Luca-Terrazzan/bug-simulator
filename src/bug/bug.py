@@ -8,16 +8,15 @@ from src.team.dev.enums import Type as DevType
 
 from src.datemngr.date_mngr import DateMngr
 
-""" Represent a bug and its properties
-"""
-class Bug():
+
+class Bug:
 
     def __init__(
         self,
         priority: Priority,
         difficulty: float,
         technology: Technology,
-        type: Type,
+        bug_type: Type,
         date_mngr: DateMngr
     ) -> None:
         self.__validate_attributes__(
@@ -30,7 +29,7 @@ class Bug():
         self.__priority: Priority = priority
         self.__difficulty: float = difficulty
         self.__technology: Technology = technology
-        self.__type: Type = type
+        self.__type: Type = bug_type
 
         self.__assignee: Optional[Dev] = None
         self.__reviewer: Optional[Dev] = None
@@ -50,15 +49,17 @@ class Bug():
     @property
     def status(self) -> Status:
         return self.__status
+
     @property
     def eta(self) -> date:
         return self.eta
+
     @property
     def created(self) -> date:
         return self.__created
     # more...
 
-    def assignEta(self, eta: date) -> None:
+    def assign_eta(self, eta: date) -> None:
         if self.__status != Status.NEW:
             raise PermissionError('Cannot give ETA to a bug whose status is not NEW')
         if self.__eta:
@@ -108,7 +109,7 @@ class Bug():
         if self.__eta is None:
             raise AttributeError('A bug without ETA cannot be completed')
 
-        self.__overdue = self.__dateFinished > self.__eta # type: ignore
+        self.__overdue = self.__dateFinished > self.__eta  # type: ignore
 
     def __str__(self):
         return f"""Status: {self.__status}

@@ -1,14 +1,16 @@
 from .enums import *
 
-class Dev():
 
-    def __init__(self, name: str, type: Type):
+class Dev:
+
+    def __init__(self, name: str, dev_type: Type):
         self.__name: str = name
-        self.__type: Type = type
+        self.__type: Type = dev_type
 
     @property
     def name(self) -> str:
         return self.__name
+
     @property
     def type(self) -> Type:
         return self.__type
