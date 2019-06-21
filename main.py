@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 from decorators import do_twice
 
@@ -9,8 +10,13 @@ def print_something():
 
 print_something()
 
-myjson = open('test.json', 'r')
-myjson = json.loads(myjson.read())
+myJSON = open('test.json', 'r')
+myJSON = json.loads(myJSON.read())
 
-print(f'my json is: {myjson}')
-print(f'array second val: {myjson[2][1]}')
+print(f'my json is: {myJSON}')
+
+jsonSecondValue = myJSON['anarray']
+
+print(type(jsonSecondValue))
+
+print(f'array second val: {jsonSecondValue}')
