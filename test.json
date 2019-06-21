@@ -1,0 +1,8 @@
+{
+    "something": 2,
+    "somethingelse": "asdasd",
+    "anarray": [1,2,3],
+    "nestedobj": {
+        "waaaat": "uuuuup"
+    }
+}
