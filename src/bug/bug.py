@@ -41,7 +41,8 @@ class Bug:
         self.__created: date = self.__date_mngr.today()
         self.__overdue: bool = False
 
-    def __validate_attributes__(self, **kwargs) -> None:
+    @staticmethod
+    def __validate_attributes__(**kwargs) -> None:
         if kwargs['difficulty'] < 0 or kwargs['difficulty'] > 1:
             raise ValueError('Difficulty must be within 0 and 1')
 
