@@ -1,7 +1,7 @@
 import unittest
+from datetime import date
 from unittest.mock import patch
 
-from datetime import date
 from .bug import Bug
 from .enums import *
 

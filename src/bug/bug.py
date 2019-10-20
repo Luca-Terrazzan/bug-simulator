@@ -1,12 +1,11 @@
-from typing import Optional
 from datetime import date, timedelta
+from typing import Optional
 
-from .enums import *
-
+from src.datemngr.date_mngr import DateMngr
 from src.team.dev.dev import Dev
 from src.team.dev.enums import Type as DevType
 
-from src.datemngr.date_mngr import DateMngr
+from .enums import *
 
 
 class Bug:
