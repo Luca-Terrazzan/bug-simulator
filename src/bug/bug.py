@@ -10,14 +10,8 @@ from .enums import *
 
 class Bug:
 
-    def __init__(
-        self,
-        priority: Priority,
-        difficulty: float,
-        technology: Technology,
-        bug_type: Type,
-        date_mngr: DateMngr
-    ) -> None:
+    def __init__(self, priority: Priority, difficulty: float, technology: Technology,
+                 bug_type: Type, date_mngr: DateMngr ) -> None:
         self.__validate_attributes__(
             priority=priority,
             difficulty=difficulty
@@ -33,8 +27,8 @@ class Bug:
         self.__assignee: Optional[Dev] = None
         self.__reviewer: Optional[Dev] = None
         self.__eta: Optional[date] = None
-        self.__dateStarted: Optional[date] = None
-        self.__dateFinished: Optional[date] = None
+        self.__date_started: Optional[date] = None
+        self.__date_finished: Optional[date] = None
 
         self.__status: Status = Status.NEW
         self.__created: date = self.__date_mngr.today()
@@ -61,7 +55,8 @@ class Bug:
 
     def assign_eta(self, eta: date) -> None:
         if self.__status != Status.NEW:
-            raise PermissionError('Cannot give ETA to a bug whose status is not NEW')
+            raise PermissionError(
+                'Cannot give ETA to a bug whose status is not NEW')
         if self.__eta:
             raise PermissionError('ETA already assigned')
         if eta <= self.__created:
@@ -80,36 +75,40 @@ class Bug:
 
         self.__status = Status.INPROGRESS
         self.__assignee = dev
-        self.__dateStarted = self.__date_mngr.today()
+        self.__date_started = self.__date_mngr.today()
 
     def finish(self) -> None:
         if self.__status != Status.INPROGRESS:
-            raise PermissionError('Cannot finish a bug whose status is not IN PROGRESS')
+            raise PermissionError(
+                'Cannot finish a bug whose status is not IN PROGRESS')
 
         self.__status = Status.CODEREVIEW
 
     def review(self, reviewer: Dev) -> None:
         if self.__status != Status.CODEREVIEW:
-            raise PermissionError('Cannot review a bug whose status is not CODE REVIEW')
+            raise PermissionError(
+                'Cannot review a bug whose status is not CODE REVIEW')
         if reviewer == self.__assignee:
             raise ValueError('Cannot self review')
         if reviewer.type != DevType.FULLSTACK and reviewer.type != self.__type:
-            raise TypeError(f'Only a fullstack or a {self.__type} developer can review this')
+            raise TypeError(
+                f'Only a fullstack or a {self.__type} developer can review this')
 
         self.__status = Status.QA
         self.__reviewer = reviewer
 
     def release(self) -> None:
         if self.__status != Status.QA:
-            raise PermissionError('Cannot release a bug whose status is not QA')
+            raise PermissionError(
+                'Cannot release a bug whose status is not QA')
 
         self.__status = Status.DONE
-        self.__dateFinished = self.__date_mngr.today()
+        self.__date_finished = self.__date_mngr.today()
 
         if self.__eta is None:
             raise AttributeError('A bug without ETA cannot be completed')
 
-        self.__overdue = self.__dateFinished > self.__eta  # type: ignore
+        self.__overdue = self.__date_finished > self.__eta  # type: ignore
 
     def __str__(self):
         return f"""Status: {self.__status}
