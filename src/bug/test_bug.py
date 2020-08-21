@@ -2,8 +2,8 @@ import unittest
 from datetime import date
 from unittest.mock import patch
 
-from .bug import Bug
 import src.bug.enums as enums
+from .bug import Bug
 
 
 class TestBug(unittest.TestCase):
@@ -19,9 +19,9 @@ class TestBug(unittest.TestCase):
             try:
                 Bug(enums.Priority.LOW, invalid_complexity, enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
             except ValueError:
-                self.assertTrue(True)
+                pass
             else:
-                self.assertTrue(False)
+                self.fail()
             self.assertEqual(dateMngrMock.today.call_count, 0, 'Dependency called')
 
     def test_bug_lifecycle(self):

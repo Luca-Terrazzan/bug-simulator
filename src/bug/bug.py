@@ -11,7 +11,7 @@ import src.bug.enums as enums
 class Bug:
 
     def __init__(self, priority: enums.Priority, difficulty: float, technology: enums.Technology,
-                 bug_type: enums.Type, date_mngr: DateMngr ) -> None:
+                 bug_type: enums.Type, date_mngr: DateMngr) -> None:
         self.__validate_attributes__(
             priority=priority,
             difficulty=difficulty
