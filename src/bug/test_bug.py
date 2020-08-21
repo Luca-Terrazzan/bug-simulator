@@ -10,27 +10,33 @@ class TestBug(unittest.TestCase):
 
     def test_bug_creation(self):
         with patch('src.datemngr.date_mngr.DateMngr') as dateMngrMock:
-            Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
-            self.assertTrue(dateMngrMock.today.assert_called_once, 'Creation date not set')
+            Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY,
+                enums.Type.BACKEND, dateMngrMock)
+            self.assertTrue(dateMngrMock.today.assert_called_once,
+                            'Creation date not set')
 
     def test_bug_invalid_creation(self):
         invalid_complexity = -1
         with patch('src.datemngr.date_mngr.DateMngr') as dateMngrMock:
             try:
-                Bug(enums.Priority.LOW, invalid_complexity, enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
+                Bug(enums.Priority.LOW, invalid_complexity,
+                    enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
             except ValueError:
                 pass
             else:
                 self.fail()
-            self.assertEqual(dateMngrMock.today.call_count, 0, 'Dependency called')
+            self.assertEqual(dateMngrMock.today.call_count,
+                             0, 'Dependency called')
 
     def test_bug_lifecycle(self):
         with patch('src.datemngr.date_mngr.DateMngr') as DateMngrMock:
             datemngrmock = DateMngrMock()
             datemngrmock.today.return_value = date(year=2019, month=1, day=1)
 
-        bug = Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY, enums.Type.BACKEND, datemngrmock)
-        self.assertTrue(datemngrmock.today.assert_called_once, 'Creation date not set')
+        bug = Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY,
+                  enums.Type.BACKEND, datemngrmock)
+        self.assertTrue(datemngrmock.today.assert_called_once,
+                        'Creation date not set')
 
         # Assign the bug an ETA
         eta = date(year=2019, month=1, day=16)
