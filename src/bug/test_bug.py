@@ -3,21 +3,21 @@ from datetime import date
 from unittest.mock import patch
 
 from .bug import Bug
-from .enums import *
+import src.bug.enums as enums
 
 
 class TestBug(unittest.TestCase):
 
     def test_bug_creation(self):
         with patch('src.datemngr.date_mngr.DateMngr') as dateMngrMock:
-            Bug(Priority.LOW, 0.5, Technology.LEGACY, Type.BACKEND, dateMngrMock)
+            Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
             self.assertTrue(dateMngrMock.today.assert_called_once, 'Creation date not set')
 
     def test_bug_invalid_creation(self):
         invalid_complexity = -1
         with patch('src.datemngr.date_mngr.DateMngr') as dateMngrMock:
             try:
-                Bug(Priority.LOW, invalid_complexity, Technology.LEGACY, Type.BACKEND, dateMngrMock)
+                Bug(enums.Priority.LOW, invalid_complexity, enums.Technology.LEGACY, enums.Type.BACKEND, dateMngrMock)
             except ValueError:
                 self.assertTrue(True)
             else:
@@ -29,34 +29,34 @@ class TestBug(unittest.TestCase):
             datemngrmock = DateMngrMock()
             datemngrmock.today.return_value = date(year=2019, month=1, day=1)
 
-        bug = Bug(Priority.LOW, 0.5, Technology.LEGACY, Type.BACKEND, datemngrmock)
+        bug = Bug(enums.Priority.LOW, 0.5, enums.Technology.LEGACY, enums.Type.BACKEND, datemngrmock)
         self.assertTrue(datemngrmock.today.assert_called_once, 'Creation date not set')
 
         # Assign the bug an ETA
         eta = date(year=2019, month=1, day=16)
         bug.assign_eta(eta)
-        self.assertEqual(bug.status, Status.ETA)
+        self.assertEqual(bug.status, enums.Status.ETA)
 
         # Put the bug in progress by a dev
         with patch('src.team.dev.dev.Dev') as DevMock:
             dev = DevMock()
         bug.start(dev)
-        self.assertEqual(bug.status, Status.INPROGRESS)
+        self.assertEqual(bug.status, enums.Status.INPROGRESS)
 
         # Dev completes fix
         bug.finish()
-        self.assertEqual(bug.status, Status.CODEREVIEW)
+        self.assertEqual(bug.status, enums.Status.CODEREVIEW)
 
         # Another dev performs the code review
         with patch('src.team.dev.dev.Dev') as DevMock:
             reviewer = DevMock()
-            reviewer.type = Type.BACKEND
+            reviewer.type = enums.Type.BACKEND
         bug.review(reviewer)
-        self.assertEqual(bug.status, Status.QA)
+        self.assertEqual(bug.status, enums.Status.QA)
 
         # QC performs testing
         bug.release()
-        self.assertEqual(bug.status, Status.DONE)
+        self.assertEqual(bug.status, enums.Status.DONE)
 
 
 if __name__ == '__main__':

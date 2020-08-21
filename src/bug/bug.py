@@ -5,13 +5,13 @@ from src.datemngr.date_mngr import DateMngr
 from src.team.dev.dev import Dev
 from src.team.dev.enums import Type as DevType
 
-from .enums import *
+import src.bug.enums as enums
 
 
 class Bug:
 
-    def __init__(self, priority: Priority, difficulty: float, technology: Technology,
-                 bug_type: Type, date_mngr: DateMngr ) -> None:
+    def __init__(self, priority: enums.Priority, difficulty: float, technology: enums.Technology,
+                 bug_type: enums.Type, date_mngr: DateMngr ) -> None:
         self.__validate_attributes__(
             priority=priority,
             difficulty=difficulty
@@ -19,10 +19,10 @@ class Bug:
 
         self.__date_mngr = date_mngr
 
-        self.__priority: Priority = priority
+        self.__priority: enums.Priority = priority
         self.__difficulty: float = difficulty
-        self.__technology: Technology = technology
-        self.__type: Type = bug_type
+        self.__technology: enums.Technology = technology
+        self.__type: enums.Type = bug_type
 
         self.__assignee: Optional[Dev] = None
         self.__reviewer: Optional[Dev] = None
@@ -30,7 +30,7 @@ class Bug:
         self.__date_started: Optional[date] = None
         self.__date_finished: Optional[date] = None
 
-        self.__status: Status = Status.NEW
+        self.__status: enums.Status = enums.Status.NEW
         self.__created: date = self.__date_mngr.today()
         self.__overdue: bool = False
 
@@ -41,7 +41,7 @@ class Bug:
 
     # Properties
     @property
-    def status(self) -> Status:
+    def status(self) -> enums.Status:
         return self.__status
 
     @property
@@ -54,7 +54,7 @@ class Bug:
     # more...
 
     def assign_eta(self, eta: date) -> None:
-        if self.__status != Status.NEW:
+        if self.__status != enums.Status.NEW:
             raise PermissionError(
                 'Cannot give ETA to a bug whose status is not NEW')
         if self.__eta:
@@ -66,26 +66,26 @@ class Bug:
         if eta.weekday() != 2:
             raise ValueError('ETA must be a wednesday')
 
-        self.__status = Status.ETA
+        self.__status = enums.Status.ETA
         self.__eta = eta
 
     def start(self, dev: Dev) -> None:
-        if self.__status != Status.ETA:
+        if self.__status != enums.Status.ETA:
             raise PermissionError('Cannot start a bug whose status is not ETA')
 
-        self.__status = Status.INPROGRESS
+        self.__status = enums.Status.INPROGRESS
         self.__assignee = dev
         self.__date_started = self.__date_mngr.today()
 
     def finish(self) -> None:
-        if self.__status != Status.INPROGRESS:
+        if self.__status != enums.Status.INPROGRESS:
             raise PermissionError(
                 'Cannot finish a bug whose status is not IN PROGRESS')
 
-        self.__status = Status.CODEREVIEW
+        self.__status = enums.Status.CODEREVIEW
 
     def review(self, reviewer: Dev) -> None:
-        if self.__status != Status.CODEREVIEW:
+        if self.__status != enums.Status.CODEREVIEW:
             raise PermissionError(
                 'Cannot review a bug whose status is not CODE REVIEW')
         if reviewer == self.__assignee:
@@ -94,15 +94,15 @@ class Bug:
             raise TypeError(
                 f'Only a fullstack or a {self.__type} developer can review this')
 
-        self.__status = Status.QA
+        self.__status = enums.Status.QA
         self.__reviewer = reviewer
 
     def release(self) -> None:
-        if self.__status != Status.QA:
+        if self.__status != enums.Status.QA:
             raise PermissionError(
                 'Cannot release a bug whose status is not QA')
 
-        self.__status = Status.DONE
+        self.__status = enums.Status.DONE
         self.__date_finished = self.__date_mngr.today()
 
         if self.__eta is None:
